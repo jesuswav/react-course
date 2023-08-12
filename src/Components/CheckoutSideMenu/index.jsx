@@ -21,7 +21,7 @@ const CheckoutSideMenu = () => {
   const handleCheckout = () => {
     context.setCount((context.count = 0));
     const orderToAdd = {
-      date: "01.02.23",
+      date: "01/02/23",
       products: context.cartProducts,
       totalProducts: context.cartProducts.length,
       totalPrice: totalPrice(context.cartProducts),
