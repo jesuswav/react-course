@@ -1,5 +1,5 @@
 import { createContext } from "react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 // creamos un contexto y posteriormente
 // creamod un proveedor que nos va a encapsular
@@ -30,6 +30,64 @@ export const ShoppingCartProvider = ({ children }) => {
   // Shopping Cart - Order
   const [order, setOrder] = useState([]);
 
+
+  // Get Products
+  const [items, setItems] = useState(null);
+  const [filteredItems, setFilteredItems] = useState(null);
+
+  // Get products by title
+  const [searchByTitle, setSearchByTitle] = useState(null);
+
+  // Get products by category
+  const [searchByCategory, setSearchByCategory] = useState(null);
+
+  // usamos useEffect para realizar la llamda
+  // a la API y obtener la información necesaria.
+  useEffect(() => {
+    fetch("https://api.escuelajs.co/api/v1/products")
+      .then((response) => response.json())
+      .then((data) => setItems(data));
+  }, []);
+
+  // Filtrado por titulo
+  const filteredItemsByTitle = (items, searchByTitle) => {
+    console.log('HOoola')   
+    return items?.filter(item => item.title.toLowerCase().includes(searchByTitle.toLowerCase()))
+  }
+
+  // Filtrado por titulo
+  const filteredItemsByCategory = (items, searchByCategory) => {
+    console.log('Items: ', items)
+    return items?.filter(item => item.category.name.toLowerCase().includes(searchByCategory.toLowerCase()))
+  }
+
+  const filterBy = (searchType, items, searchByTitle, searchByCategory) => {
+    if (searchType === 'BY_TITLE') {
+      return filteredItemsByTitle(items, searchByTitle)
+    }
+
+    if (searchType === 'BY_CATEGORY') {
+      return filteredItemsByCategory(items, searchByCategory)
+    }
+
+    if (searchType === 'BY_TITLE_AND_CATEGORY') {
+      return filteredItemsByCategory(items, searchByCategory).filter(item => item.title.toLowerCase().includes(searchByTitle.toLowerCase()))
+    }
+
+    if (!searchType) {
+      return items
+    }
+  }
+
+  // Este efecto lo utilizamos ya no para realizar un fetch,
+  // sino para obtener los items filtrados por medio del titulo
+  useEffect(() => {
+    if (searchByTitle && searchByCategory) setFilteredItems(filterBy('BY_TITLE_AND_CATEGORY', items, searchByTitle, searchByCategory))
+    if (searchByTitle && !searchByCategory) setFilteredItems(filterBy('BY_TITLE', items, searchByTitle, searchByCategory))
+    if (!searchByTitle && searchByCategory) setFilteredItems(filterBy('BY_CATEGORY', items, searchByTitle, searchByCategory))
+    if (!searchByTitle && !searchByCategory) setFilteredItems(filterBy(null, items, searchByTitle, searchByCategory))
+  }, [items, searchByTitle, searchByCategory]);
+
   return (
     <ShoppingCartContext.Provider value={{
       count,
@@ -45,7 +103,15 @@ export const ShoppingCartProvider = ({ children }) => {
       openCheckoutSideMenu,
       closeCheckoutSideMenu,
       order,
-      setOrder
+      setOrder,
+      items,
+      setItems,
+      searchByTitle,
+      setSearchByTitle,
+      filteredItems,
+      setFilteredItems,
+      searchByCategory,
+      setSearchByCategory
     }}>
       {children}
     </ShoppingCartContext.Provider>

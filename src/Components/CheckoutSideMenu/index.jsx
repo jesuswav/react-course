@@ -8,7 +8,7 @@ import "./styles.css";
 
 const CheckoutSideMenu = () => {
   const context = useContext(ShoppingCartContext);
-  console.log("CART: ", context.cartProducts);
+  // console.log("CART: ", context.cartProducts);
 
   const handleDelete = (id) => {
     context.setCount(context.count - 1);
@@ -30,6 +30,7 @@ const CheckoutSideMenu = () => {
     context.closeCheckoutSideMenu()
     context.setOrder([...context.order, orderToAdd]);
     context.setCartProducts([]);
+    context.setSearchByTitle(null);
   };
 
   return (
