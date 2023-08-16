@@ -77,13 +77,11 @@ export const ShoppingCartProvider = ({ children }) => {
 
   // Filtrado por titulo
   const filteredItemsByTitle = (items, searchByTitle) => {
-    console.log('HOoola')   
     return items?.filter(item => item.title.toLowerCase().includes(searchByTitle.toLowerCase()))
   }
 
   // Filtrado por titulo
   const filteredItemsByCategory = (items, searchByCategory) => {
-    console.log('Items: ', items)
     return items?.filter(item => item.category.name.toLowerCase().includes(searchByCategory.toLowerCase()))
   }
 
