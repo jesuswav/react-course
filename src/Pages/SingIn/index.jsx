@@ -29,6 +29,7 @@ function SingIn() {
     return <Navigate replace to={'/'}/>
   }
 
+  // Create an account and then, Log in the user creaded previously
   const createAnAccount = () => {
     const formData = new FormData(form.current);
     const data = {
