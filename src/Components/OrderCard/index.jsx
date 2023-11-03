@@ -1,6 +1,7 @@
 import { XMarkIcon } from "@heroicons/react/24/outline";
 
 const OrderCard = (props) => {
+  // eslint-disable-next-line react/prop-types
   const { id, title, imageUrl, price, handleDelete } = props;
   let renderXMarkIcon;
   if (handleDelete) {
